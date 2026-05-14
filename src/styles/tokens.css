@@ -1,0 +1,110 @@
+/* ============================================================
+   Cryptic Companion — Design Tokens
+   All visual variables live here. Nothing else should define
+   colours, shadows, radii, or transitions.
+
+   Structure:
+     :root         → light theme (default)
+     [data-theme="dark"]  → dark theme overrides
+     [data-monochrome]    → monochrome mode overrides
+   ============================================================ */
+
+:root {
+  /* ── Paper / ink — light mode ── */
+  --paper:        #f4efe6;   /* page background — warm off-white */
+  --paper-sunk:   #ebe4d5;   /* slightly deeper: toolbars, sidebars */
+  --paper-card:   #fbf8f1;   /* cards, raised surfaces */
+  --ink:          #1a1814;   /* primary text */
+  --ink-soft:     #4a443a;   /* secondary text */
+  --ink-mute:     #8a8478;   /* placeholder, labels */
+  --rule:         #2b271f;   /* strong borders, clue number bg */
+  --rule-soft:    #d6cfbf;   /* subtle dividers */
+  --hairline:     #b8b0a0;   /* very faint borders */
+
+  /* ── Semantic accent colours — the three clue parts ── */
+  /* These are the product's identity. Do not change casually. */
+  --def:          #9a2b3f;   /* definition  — burgundy */
+  --def-bg:       #f3dde2;
+  --ind:          #1f5d52;   /* indicator   — bottle green */
+  --ind-bg:       #d8e8e3;
+  --fod:          #a86615;   /* fodder      — burnt amber */
+  --fod-bg:       #f3e2c6;
+
+  /* ── Shadows ── */
+  --shadow-card:  0 1px 0 rgba(0,0,0,.04), 0 8px 24px -16px rgba(0,0,0,.18);
+  --shadow-soft:  0 1px 0 rgba(0,0,0,.03);
+
+  /* ── Shape ── */
+  --radius-sm:    4px;
+  --radius:       8px;
+  --radius-lg:    14px;
+
+  /* ── Motion ── */
+  --t-fast:       120ms cubic-bezier(.4,.0,.2,1);
+  --t-med:        220ms cubic-bezier(.4,.0,.2,1);
+
+  /* ── Typography scale ── */
+  --text-xs:      10px;
+  --text-sm:      12px;
+  --text-base:    14px;
+  --text-md:      15px;
+  --text-lg:      19px;
+  --text-xl:      22px;
+  --text-2xl:     28px;
+
+  /* ── Spacing ── */
+  --space-1:      4px;
+  --space-2:      8px;
+  --space-3:      12px;
+  --space-4:      16px;
+  --space-5:      20px;
+  --space-6:      24px;
+  --space-7:      28px;
+  --space-8:      32px;
+
+  /* ── Z-index layers ── */
+  --z-topbar:     20;
+  --z-overlay:    40;
+  --z-modal:      60;
+
+  /* ── Shell geometry ──
+     Used for sticky CluePanel top offset.
+     Update if topbar or tabbar height changes. */
+  --topbar-h:     67px;   /* topbar padding + font + border */
+  --tabbar-h:     49px;   /* workspace tab bar + border */
+  --shell-offset: calc(var(--topbar-h) + var(--tabbar-h));
+}
+
+/* ── Dark theme ── */
+[data-theme="dark"] {
+  --paper:        #14130f;
+  --paper-sunk:   #0d0c09;
+  --paper-card:   #1c1a15;
+  --ink:          #f0eada;
+  --ink-soft:     #c4bda9;
+  --ink-mute:     #807a6a;
+  --rule:         #e8e1cf;
+  --rule-soft:    #3a362c;
+  --hairline:     #4a4538;
+
+  --def:          #f08aa0;
+  --def-bg:       #3a1820;
+  --ind:          #6dc5b3;
+  --ind-bg:       #133029;
+  --fod:          #e8b56a;
+  --fod-bg:       #3a2810;
+
+  --shadow-card:  0 1px 0 rgba(0,0,0,.4), 0 12px 32px -20px rgba(0,0,0,.6);
+  --shadow-soft:  0 1px 0 rgba(0,0,0,.3);
+}
+
+/* ── Monochrome mode ── */
+/* Strips all accent colour, preserving structure for low-vision users */
+[data-monochrome="true"] {
+  --def:          var(--ink);
+  --def-bg:       var(--paper-sunk);
+  --ind:          var(--ink-soft);
+  --ind-bg:       var(--paper-sunk);
+  --fod:          var(--ink-mute);
+  --fod-bg:       var(--paper-sunk);
+}

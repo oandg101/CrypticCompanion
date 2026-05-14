@@ -1,0 +1,79 @@
+# ──────────────────────────────────────────────────────────────
+# Deploy Cryptic Companion to GitHub Pages
+#
+# SETUP (one-time, in your GitHub repo settings):
+#   Settings → Pages → Source → "GitHub Actions"
+#
+# TRIGGERING:
+#   Runs automatically on every push to main.
+#   Can also be triggered manually from the Actions tab.
+#
+# BASE PATH:
+#   The workflow reads your repository name from GitHub's context
+#   and sets VITE_BASE_URL=/<repo-name>/ automatically.
+#   No manual configuration needed.
+# ──────────────────────────────────────────────────────────────
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:           # allow manual trigger from Actions tab
+
+permissions:
+  contents: read
+  pages:    write
+  id-token: write
+
+# Only one deployment can run at a time; cancel older in-progress runs
+concurrency:
+  group:              pages
+  cancel-in-progress: true
+
+jobs:
+
+  # ── Build ─────────────────────────────────────────────────
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache:        npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Sets the Vite base path to /<repo-name>/
+          # so that all asset URLs are correct on GitHub Pages.
+          VITE_BASE_URL: /${{ github.event.repository.name }}/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  # ── Deploy ────────────────────────────────────────────────
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url:  ${{ steps.deployment.outputs.page_url }}
+    steps:
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v4
+
+      - name: Deploy to GitHub Pages
+        id:   deployment
+        uses: actions/deploy-pages@v4

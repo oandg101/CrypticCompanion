@@ -1,0 +1,486 @@
+/* ============================================================
+   Clue Panel — left rail styles
+   Covers: CluePanel, ClueCard, ClueText, ClueBreakdown, CluePartCard
+   ============================================================ */
+
+/* ── Panel wrapper ── */
+/* Sticky: stays visible as user scrolls through attempts */
+.clue-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: sticky;
+  top: calc(var(--shell-offset) + 16px); /* topbar + tabbar + gap */
+  align-self: start;
+  /* Max height so breakdown doesn't overflow viewport */
+  max-height: calc(100vh - 112px);
+  overflow-y: auto;
+  /* Hide scrollbar visually (still scrollable) */
+  scrollbar-width: none;
+}
+.clue-panel::-webkit-scrollbar { display: none; }
+
+/* On tablet/mobile: stop being sticky, flow naturally */
+@media (max-width: 1024px) {
+  .clue-panel {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+/* ── Clue card ── */
+.clue-card {
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 24px 22px 20px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+/* Subtle inner border — the "double frame" detail from the prototype */
+.clue-card::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid var(--rule-soft);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* Expert mode: tighten the card */
+[data-mode="expert"] .clue-card {
+  padding: 18px 18px 14px;
+}
+
+/* ── Clue eyebrow (clue number + reference) ── */
+.clue__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 14px;
+}
+
+.clue__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: var(--rule);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .clue__num {
+  color: var(--paper-sunk);
+}
+
+/* ── Clue text ── */
+.clue__text {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink);
+  font-variation-settings: "opsz" 24, "SOFT" 30;
+  margin: 0;
+}
+
+/* Expert mode: slightly smaller clue text */
+[data-mode="expert"] .clue__text {
+  font-size: var(--text-lg);
+}
+
+/* ── Annotation spans within the clue text ── */
+.clue__text .def-span {
+  color: var(--def);
+  border-bottom: 1.5px solid var(--def);
+  padding-bottom: 1px;
+}
+
+.clue__text .ind-span {
+  color: var(--ind);
+  border-bottom: 1.5px solid var(--ind);
+  padding-bottom: 1px;
+  font-style: italic;
+}
+
+.clue__text .fod-span {
+  color: var(--fod);
+  border-bottom: 1.5px solid var(--fod);
+  padding-bottom: 1px;
+}
+
+/* ── Clue meta (word count + enumeration) ── */
+.clue__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--rule-soft);
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.clue__enum {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* ── Breakdown section ── */
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Breakdown header row ── */
+.breakdown__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.breakdown__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  font-weight: 600;
+  color: var(--ink-mute);
+}
+
+/* ── Part cards (def / ind / fod) ── */
+.part {
+  border: 1px solid;
+  border-radius: var(--radius);
+  background: var(--paper-card);
+  overflow: hidden;
+  transition:
+    transform var(--t-fast),
+    box-shadow var(--t-fast);
+}
+
+.part:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card);
+}
+
+/* Coloured borders using color-mix to blend accent with neutral */
+.part--def {
+  border-color: color-mix(in srgb, var(--def) 35%, var(--rule-soft));
+}
+.part--ind {
+  border-color: color-mix(in srgb, var(--ind) 35%, var(--rule-soft));
+}
+.part--fod {
+  border-color: color-mix(in srgb, var(--fod) 35%, var(--rule-soft));
+}
+
+/* ── Part card header ── */
+.part__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  font-weight: 600;
+  /* Text colour set per variant below */
+  color: var(--paper-card);
+}
+
+.part--def .part__head { background: var(--def); }
+.part--ind .part__head { background: var(--ind); }
+.part--fod .part__head { background: var(--fod); }
+
+[data-theme="dark"] .part--def .part__head,
+[data-theme="dark"] .part--ind .part__head,
+[data-theme="dark"] .part--fod .part__head {
+  color: var(--paper-sunk);
+}
+
+.part__head-right {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  opacity: 0.85;
+  font-size: 11px;
+}
+
+/* ── Part card body ── */
+.part__body {
+  padding: 12px 14px 14px;
+}
+
+/* Expert mode: tighter padding */
+[data-mode="expert"] .part__body {
+  padding: 10px 14px;
+}
+
+.part__quote {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 400;
+  line-height: var(--leading-snug);
+  margin: 0 0 6px;
+  font-style: normal;
+}
+
+/* Expert mode: no bottom margin (no hint below) */
+[data-mode="expert"] .part__quote {
+  margin-bottom: 0;
+}
+
+.part--def .part__quote { color: var(--def); }
+.part--ind .part__quote { color: var(--ind); font-style: italic; }
+.part--fod .part__quote { color: var(--fod); }
+
+/* ── Beginner-only hints ── */
+/* Visible in beginner mode, hidden in expert mode via data-mode on <html> */
+.part__hint {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  line-height: var(--leading-normal);
+  margin: 0;
+}
+
+.beginner-only {
+  display: block;
+}
+
+[data-mode="expert"] .beginner-only {
+  display: none;
+}
+
+.part__hint .mono {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+/* ── No annotations message ── */
+.breakdown__empty {
+  font-size: var(--text-sm);
+  color: var(--ink-mute);
+  font-style: italic;
+  padding: 4px 0;
+}
+
+/* ── Clue edit button (pencil, in eyebrow row) ── */
+.clue__edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;       /* push to right of eyebrow flex row */
+  padding: 3px 7px;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-mute);
+  font-size: 10px;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  opacity: 0;              /* hidden until clue card is hovered */
+  transition: opacity var(--t-fast), color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+}
+
+.clue__edit-btn svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* Show on card hover */
+.clue-card:hover .clue__edit-btn {
+  opacity: 1;
+}
+
+.clue__edit-btn:hover {
+  color: var(--ink);
+  border-color: var(--hairline);
+  background: var(--paper-sunk);
+}
+
+.clue__edit-btn:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--ind);
+  outline-offset: 2px;
+}
+
+/* ── Clue edit form ── */
+.clue-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.clue-edit-form__row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.clue-edit-form__label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--ink-mute);
+}
+
+.clue-edit-form__input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  background: var(--paper-sunk);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  outline: none;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.clue-edit-form__input--enum {
+  width: 100px;           /* narrow — enumeration is short */
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.clue-edit-form__input:focus {
+  border-color: var(--rule);
+  background: var(--paper-card);
+}
+
+.clue-edit-form__textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  background: var(--paper-sunk);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
+  outline: none;
+  resize: vertical;
+  min-height: 72px;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.clue-edit-form__textarea:focus {
+  border-color: var(--rule);
+  background: var(--paper-card);
+}
+
+/* Warning shown when text change will clear annotations */
+.clue-edit-form__warning {
+  font-size: var(--text-xs);
+  color: var(--fod);
+  background: var(--fod-bg);
+  border: 1px solid color-mix(in srgb, var(--fod) 20%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 7px 10px;
+  margin: 0;
+  line-height: var(--leading-normal);
+}
+
+/* Action row */
+.clue-edit-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.clue-edit-form__btn {
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  border: 1px solid transparent;
+}
+
+.clue-edit-form__btn--cancel {
+  background: transparent;
+  border-color: var(--rule-soft);
+  color: var(--ink-mute);
+}
+
+.clue-edit-form__btn--cancel:hover {
+  border-color: var(--hairline);
+  color: var(--ink);
+  background: var(--paper-sunk);
+}
+
+.clue-edit-form__btn--save {
+  background: var(--rule);
+  color: var(--paper);
+  border-color: var(--rule);
+}
+
+.clue-edit-form__btn--save:hover:not(:disabled) {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.clue-edit-form__btn--save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+[data-theme="dark"] .clue-edit-form__btn--save {
+  color: var(--paper-sunk);
+}
+
+/* ── Click-to-annotate word styles ── */
+.clue-word {
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0 1px;
+  transition: opacity var(--t-fast);
+  /* Ensure focus ring appears cleanly */
+  outline-offset: 1px;
+}
+
+.clue-word:hover {
+  opacity: 0.75;
+}
+
+/* Keyboard focus ring — uses the global :focus-visible rule
+   but we add a subtle background for better visibility */
+.clue-word:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Beginner hint below clue card */
+.clue__annotate-hint {
+  font-size: var(--text-xs);
+  color: var(--ink-mute);
+  font-style: italic;
+  padding: 0 2px;
+}
+
+[data-mode="expert"] .clue__annotate-hint {
+  display: none;
+}

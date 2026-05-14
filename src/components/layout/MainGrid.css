@@ -1,0 +1,30 @@
+/* ── Main grid shell ── */
+/* Two-column layout: narrow sticky clue panel left, workspace stack right */
+
+.main-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 380px) 1fr;
+  gap: 28px;
+  padding: 28px;
+  max-width: 1480px;
+  margin: 0 auto;
+  width: 100%;
+  /* Ensure grid fills the main content area */
+  flex: 1;
+}
+
+/* ── Responsive: single column on tablet and below ── */
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* ── Mobile: tighter padding ── */
+@media (max-width: 640px) {
+  .main-grid {
+    padding: 16px;
+    gap: 20px;
+  }
+}

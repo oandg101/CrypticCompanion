@@ -1,0 +1,196 @@
+/* ============================================================
+   Cryptic Companion — Global Styles
+
+   Order matters — this file depends on tokens.css being
+   loaded first (it uses CSS custom properties throughout).
+   ============================================================ */
+
+/* ── Box model reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ── Root reset ── */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* ── Body — the paper ── */
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+
+  /* Font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+
+  /* Smooth theme transitions */
+  transition:
+    background-color var(--t-med),
+    color var(--t-med);
+
+  min-height: 100vh;
+
+  /* ── Paper grain texture ──
+     Two offset radial gradients create a subtle noise/grain effect.
+     This is what gives the app its tactile, paper-like quality.
+     On dark mode the dots use white, on light they use black. */
+  background-image:
+    radial-gradient(rgba(0, 0, 0, .012) 1px, transparent 1px),
+    radial-gradient(rgba(0, 0, 0, .012) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 1px 1px;
+}
+
+[data-theme="dark"] body {
+  background-image:
+    radial-gradient(rgba(255, 255, 255, .015) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, .012) 1px, transparent 1px);
+}
+
+/* ── React root ── */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Lists ── */
+ul, ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ── Links ── */
+a {
+  color: var(--ind);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* ── Buttons reset ── */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}
+
+/* ── Scrollbar styling (webkit) ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--paper-sunk);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--hairline);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-mute);
+}
+
+/* ── Selection highlight ── */
+::selection {
+  background: var(--ind-bg);
+  color: var(--ind);
+}
+
+/* ── Error boundary ── */
+.error-boundary {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: var(--paper);
+}
+
+.error-boundary__card {
+  max-width: 480px;
+  width: 100%;
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.error-boundary__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.error-boundary__body {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  line-height: var(--leading-normal);
+  margin: 0;
+}
+
+.error-boundary__btn {
+  align-self: flex-start;
+  padding: 8px 18px;
+  background: var(--rule);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--t-fast);
+}
+
+.error-boundary__btn:hover {
+  background: var(--ink);
+}
+
+[data-theme="dark"] .error-boundary__btn {
+  color: var(--paper-sunk);
+}
+
+.error-boundary__details {
+  font-size: var(--text-xs);
+  color: var(--ink-mute);
+}
+
+.error-boundary__details summary {
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.error-boundary__trace {
+  background: var(--paper-sunk);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--def);
+  margin: 0;
+}

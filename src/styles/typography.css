@@ -1,0 +1,163 @@
+/* ============================================================
+   Cryptic Companion — Typography System
+
+   Three typefaces, each with a distinct purpose:
+
+   Fraunces      — Display/editorial. Used for clue text,
+                   attempt numbers, and anything that should
+                   feel like print. Variable font with SOFT,
+                   WONK, and opsz axes.
+
+   IBM Plex Mono — Data/precision. Used for letter tiles,
+                   working answers, enumerations, candidate
+                   words — anything where character spacing
+                   and monospacing matters.
+
+   IBM Plex Sans — UI/prose. Used for all interface text,
+                   labels, notes, tool names, and body copy.
+
+   ── FONT LOADING OPTIONS ─────────────────────────────────
+
+   Option A (default): Google Fonts CDN
+     Works out of the box. Fast — fonts are cached globally.
+     Privacy note: each visitor's browser contacts Google servers.
+     For GDPR compliance in the EU, switch to Option B.
+
+   Option B: self-hosted (GDPR-compliant)
+     See README.md §"Self-hosting fonts" for download instructions.
+     1. Download the font files and place in public/fonts/
+     2. Comment out the @import below
+     3. Uncomment the @font-face block below
+   ============================================================ */
+
+/* ── Option A: Google Fonts CDN (default, active) ─────────── */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+/* ── Option B: Self-hosted @font-face declarations ─────────
+   Uncomment this block and comment out the @import above.
+   Font files go in public/fonts/ (see README for download steps).
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/Fraunces-VariableFont_SOFT,WONK,opsz,wght.woff2') format('woff2');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/IBMPlexMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/IBMPlexMono-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/IBMPlexSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/IBMPlexSans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/IBMPlexSans-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('/fonts/IBMPlexSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+   ──────────────────────────────────────────────────────── */
+
+/* ── Font stacks ─────────────────────────────────────────── */
+/* Fallback chains ensure readable text even before fonts load */
+:root {
+  --font-display:  'Fraunces', 'Georgia', 'Times New Roman', serif;
+  --font-mono:     'IBM Plex Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+  --font-ui:       'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+
+  /* Line heights */
+  --leading-tight:  1.25;
+  --leading-snug:   1.35;
+  --leading-normal: 1.5;
+  --leading-loose:  1.65;
+
+  /* Letter spacing */
+  --tracking-tight:  -0.02em;
+  --tracking-wide:   0.08em;
+  --tracking-wider:  0.18em;
+  --tracking-widest: 0.22em;
+}
+
+/* ── Base typographic elements ── */
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--ink);
+}
+
+p {
+  margin: 0;
+  line-height: var(--leading-normal);
+}
+
+/* ── Utility classes ── */
+.type-display {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 144, 'SOFT' 50;
+}
+
+.type-display-clue {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  font-variation-settings: 'opsz' 24, 'SOFT' 30;
+}
+
+.type-mono {
+  font-family: var(--font-mono);
+}
+
+.type-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  font-weight: 600;
+  color: var(--ink-mute);
+}
+
+.type-eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}

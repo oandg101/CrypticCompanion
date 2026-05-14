@@ -1,0 +1,110 @@
+/* ============================================================
+   SessionControls — export / import button group in Topbar
+   ============================================================ */
+
+.session-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  /* Subtle visual separation from the brand and the toggles */
+  padding: 0 12px;
+  border-left:  1px solid var(--rule-soft);
+  border-right: 1px solid var(--rule-soft);
+}
+
+/* ── Action buttons ── */
+.session-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-mute);
+  font-size: var(--text-xs);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  white-space: nowrap;
+}
+
+.session-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.session-btn:hover {
+  border-color: var(--rule-soft);
+  background: var(--paper-card);
+  color: var(--ink);
+  box-shadow: var(--shadow-soft);
+}
+
+.session-btn:focus-visible {
+  outline: 2px solid var(--ind);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.session-btn:active {
+  transform: translateY(1px);
+}
+
+/* ── Inline status message ── */
+.session-status {
+  font-size: var(--text-xs);
+  font-family: var(--font-ui);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  margin: 0;
+  white-space: nowrap;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Fade in */
+  animation: session-status-in var(--t-fast) ease;
+}
+
+.session-status--success {
+  background: var(--ind-bg);
+  color: var(--ind);
+  border: 1px solid color-mix(in srgb, var(--ind) 20%, transparent);
+}
+
+.session-status--error {
+  background: var(--fod-bg);
+  color: var(--fod);
+  border: 1px solid color-mix(in srgb, var(--fod) 20%, transparent);
+}
+
+@keyframes session-status-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Mobile: hide text labels, keep icons ── */
+@media (max-width: 640px) {
+  .session-controls {
+    padding: 0 8px;
+  }
+
+  .session-btn__label {
+    display: none;
+  }
+
+  .session-btn {
+    padding: 6px 8px;
+  }
+
+  .session-status {
+    display: none; /* too narrow to show status on small screens */
+  }
+}
+
+/* ── Reduced motion ── */
+[data-reduced-motion="true"] .session-status {
+  animation: none;
+}

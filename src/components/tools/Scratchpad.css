@@ -1,0 +1,648 @@
+/* ============================================================
+   Scratchpad — the interactive workspace area
+   Covers: scratchpad wrapper, work lines, tiles, inputs,
+           source display, candidate chips
+
+   Phase 4 additions:
+     - .tile-wrap (replaces bare .tile — now a positioned wrapper)
+     - .tile-body (the main clickable button inside the wrapper)
+     - .tile-letter / .tile-pos (letter + position number)
+     - .tile-lock-btn (overlay lock toggle, top-right corner)
+     - .tile-wrap.is-selected (lifted, highlighted state)
+     - .tile-wrap.is-target (dashed drop-target state)
+     - .tile-wrap.is-locked (confirmed letter state)
+     - .tile-rack (wrapper for action bar + tile grid)
+     - .tile-rack__actions (toolbar row above tiles)
+     - .tile-rack__btns (button group)
+     - .tile-rack__count (tile count label)
+     - .tile-action-btn (Reset / Shuffle / Copy buttons)
+     - .tile-rack__hint (selection-active status bar)
+   ============================================================ */
+
+/* ── Scratchpad wrapper ── */
+.scratchpad {
+  padding: 20px 22px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+/* ── "Select a tool" empty state ── */
+.scratchpad-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  min-height: 140px;
+  color: var(--ink-mute);
+}
+
+.scratchpad-empty__prompt {
+  font-size: var(--text-sm);
+  font-style: italic;
+}
+
+.scratchpad-empty__hint {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  opacity: 0.6;
+}
+
+/* ── Work line ── */
+.work-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: var(--text-sm);
+}
+
+.work-line__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--ink-mute);
+  min-width: 72px;
+  padding-top: 7px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.work-line__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.work-line__value {
+  font-family: var(--font-mono);
+  color: var(--ink);
+  letter-spacing: 0.08em;
+}
+
+.work-line__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  background: var(--ind-bg);
+  color: var(--ind);
+  font-weight: 500;
+  font-family: var(--font-mono);
+}
+
+/* ── Source string display (hidden-word mode) ── */
+.source-string {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  line-height: var(--leading-normal);
+  color: var(--ink-soft);
+  word-break: break-word;
+}
+
+.source-string mark {
+  background: var(--fod-bg);
+  color: var(--fod);
+  padding: 1px 2px;
+  border-radius: 2px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ── Text inputs in scratchpad ── */
+.scratchpad-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  background: var(--paper-sunk);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  transition: border-color var(--t-fast);
+  outline: none;
+  resize: none;
+}
+
+.scratchpad-input:hover {
+  border-color: var(--hairline);
+}
+
+.scratchpad-input:focus {
+  border-color: var(--rule);
+  background: var(--paper-card);
+}
+
+.scratchpad-input::placeholder {
+  color: var(--ink-mute);
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+/* Working answer — monospace, spaced letters */
+.working-answer-input {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ── Tile rack container ─────────────────────────────────────
+   Wraps the action bar + tile grid + status hint.
+   ─────────────────────────────────────────────────────────── */
+.tile-rack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Tile rack action bar ── */
+.tile-rack__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tile-rack__count {
+  font-size: var(--text-xs);
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.tile-rack__btns {
+  display: flex;
+  gap: 4px;
+}
+
+/* ── Tile action buttons (Reset / Shuffle / Copy) ── */
+.tile-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  background: var(--paper-sunk);
+  color: var(--ink-mute);
+  font-size: var(--text-xs);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  white-space: nowrap;
+}
+
+.tile-action-btn svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.tile-action-btn:hover {
+  border-color: var(--hairline);
+  background: var(--paper-card);
+  color: var(--ink);
+}
+
+.tile-action-btn:focus-visible {
+  outline: 2px solid var(--ind);
+  outline-offset: 2px;
+}
+
+/* Copy button gets a subtle accent tint */
+.tile-action-btn--copy {
+  border-color: color-mix(in srgb, var(--ind) 30%, var(--rule-soft));
+  color: var(--ind);
+}
+
+.tile-action-btn--copy:hover {
+  background: var(--ind-bg);
+  border-color: var(--ind);
+  color: var(--ind);
+}
+
+/* ── Tile grid (flex row, wraps for long words) ── */
+.tiles {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  /* Minimum tap target row height */
+  min-height: 52px;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.tiles-empty {
+  font-size: var(--text-sm);
+  color: var(--ink-mute);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ── Tile wrapper ─────────────────────────────────────────────
+   Provides position context for the lock button overlay.
+   All tile states (.is-selected, .is-locked, .is-target) live
+   here so they can affect both the body button and the lock button.
+   ─────────────────────────────────────────────────────────── */
+.tile-wrap {
+  position: relative;
+  display: inline-flex;
+  /* Consistent size container */
+  width: 40px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+/* ── Tile body — the main clickable button ── */
+.tile-body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+
+  background: var(--paper-card);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+
+  /* Letterpress-style inset shadow */
+  box-shadow:
+    0 1px 0 var(--rule-soft),
+    inset 0 -2px 0 var(--rule-soft);
+
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+
+  /* Smooth lift transition — disabled in reduced-motion mode */
+  transition:
+    transform var(--t-fast),
+    box-shadow var(--t-fast),
+    border-color var(--t-fast),
+    background var(--t-fast);
+}
+
+/* Hover lift — all tiles when no selection is active */
+.tile-body:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+
+.tile-body:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 var(--rule-soft);
+}
+
+/* Focus ring — keyboard navigation */
+.tile-body:focus-visible {
+  outline: 2px solid var(--ind);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Tile letter (large, monospace) ── */
+.tile-letter {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--ink);
+  line-height: 1;
+  /* Prevent the letter from shifting on state change */
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+/* ── Tile position number (tiny, below letter) ── */
+.tile-pos {
+  font-size: 8px;
+  color: var(--ink-mute);
+  line-height: 1;
+  font-family: var(--font-mono);
+  opacity: 0.7;
+}
+
+/* ── Tile lock button (corner overlay) ── */
+.tile-lock-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink-mute);
+  cursor: pointer;
+  padding: 0;
+
+  /* Hidden until tile is hovered or locked */
+  opacity: 0;
+  transition: opacity var(--t-fast), color var(--t-fast);
+}
+
+.tile-lock-btn svg {
+  width: 9px;
+  height: 9px;
+}
+
+/* Show lock button on tile hover */
+.tile-wrap:hover .tile-lock-btn {
+  opacity: 0.5;
+}
+
+.tile-lock-btn:hover {
+  opacity: 1 !important;
+  color: var(--ind);
+}
+
+/* ═══ TILE STATES ════════════════════════════════════════════ */
+
+/* ── Selected — the tile "held in hand", waiting to be placed ── */
+.tile-wrap.is-selected .tile-body {
+  background: var(--paper-card);
+  border-color: var(--ind);
+  box-shadow:
+    0 4px 12px -2px rgba(0, 0, 0, 0.18),
+    0 0 0 2px var(--ind-bg);
+  /* Lift effect — shows the tile is "picked up" */
+  transform: translateY(-4px);
+  color: var(--ind);
+}
+
+.tile-wrap.is-selected .tile-letter {
+  color: var(--ind);
+}
+
+/* Selected tile: show lock button clearly */
+.tile-wrap.is-selected .tile-lock-btn {
+  opacity: 0.4;
+}
+
+/* ── Target — tiles that can receive the selected tile ── */
+.tile-wrap.is-target .tile-body {
+  border-style: dashed;
+  border-color: var(--hairline);
+  background: var(--paper-sunk);
+  /* Subtle downward nudge — "make room" */
+  transform: translateY(1px);
+}
+
+/* Target tiles deepen their visual on hover — confirms intent */
+.tile-wrap.is-target .tile-body:hover {
+  border-color: var(--ind);
+  background: var(--ind-bg);
+  transform: translateY(0);
+}
+
+.tile-wrap.is-target .tile-body:hover .tile-letter {
+  color: var(--ind);
+}
+
+/* ── Locked — letter confirmed ── */
+.tile-wrap.is-locked .tile-body {
+  background: var(--ind-bg);
+  border-color: var(--ind);
+  border-style: solid;
+  box-shadow: none;
+}
+
+.tile-wrap.is-locked .tile-letter {
+  color: var(--ind);
+}
+
+/* Lock button is always visible when locked */
+.tile-wrap.is-locked .tile-lock-btn {
+  opacity: 1;
+  color: var(--ind);
+}
+
+/* ── Locked + Selected (can happen — confirmed tile still moveable) ── */
+.tile-wrap.is-locked.is-selected .tile-body {
+  box-shadow:
+    0 4px 12px -2px rgba(0, 0, 0, 0.18),
+    0 0 0 2px var(--ind-bg);
+  transform: translateY(-4px);
+}
+
+/* ── Reduced motion — disable all tile transforms ── */
+[data-reduced-motion="true"] .tile-body,
+[data-reduced-motion="true"] .tile-wrap.is-selected .tile-body,
+[data-reduced-motion="true"] .tile-wrap.is-target .tile-body {
+  transform: none !important;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+/* In reduced motion, show selected state via outline only */
+[data-reduced-motion="true"] .tile-wrap.is-selected .tile-body {
+  outline: 2px solid var(--ind);
+  outline-offset: 1px;
+}
+
+/* ── Dark mode tile adjustments ── */
+[data-theme="dark"] .tile-body {
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.04),
+    inset 0 -2px 0 rgba(0,0,0,.3);
+}
+
+[data-theme="dark"] .tile-wrap.is-selected .tile-body {
+  box-shadow:
+    0 4px 16px -2px rgba(0, 0, 0, 0.5),
+    0 0 0 2px var(--ind-bg);
+}
+
+/* ── Selection status hint bar ── */
+.tile-rack__hint {
+  font-size: var(--text-xs);
+  color: var(--ink-mute);
+  padding: 6px 10px;
+  background: var(--ind-bg);
+  border: 1px solid color-mix(in srgb, var(--ind) 25%, transparent);
+  border-radius: var(--radius-sm);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.tile-rack__hint-selected {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ind);
+  letter-spacing: 0.05em;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CANDIDATE CHIPS (unchanged from Phase 3)
+   ───────────────────────────────────────────────────────────── */
+.candidate-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.candidates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.candidate {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px 5px 11px;
+  background: var(--paper-sunk);
+  border: 1px solid var(--rule-soft);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  transition: all var(--t-fast);
+}
+
+.candidate--starred {
+  border-color: var(--ind);
+  color: var(--ind);
+  background: var(--ind-bg);
+}
+
+.candidate__remove {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+  opacity: 0.5;
+  transition: opacity var(--t-fast), background var(--t-fast);
+}
+
+.candidate__remove:hover {
+  opacity: 1;
+  background: color-mix(in srgb, currentColor 15%, transparent);
+}
+
+
+/* ── Candidate word (flex child) ── */
+.candidate__word {
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+/* ── Star button ── */
+.candidate__star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: transparent;
+  color: var(--ink-mute);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color var(--t-fast), transform var(--t-fast);
+  border-radius: 2px;
+}
+
+.candidate__star:hover {
+  color: var(--ind);
+  transform: scale(1.2);
+}
+
+.candidate--starred .candidate__star {
+  color: var(--ind);
+}
+
+/* ── Candidate input ── */
+.candidate-input-wrapper {
+  display: flex;
+}
+
+.candidate-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  background: var(--paper-sunk);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color var(--t-fast);
+}
+
+.candidate-input:focus {
+  border-color: var(--rule);
+  background: var(--paper-card);
+}
+
+.candidate-input::placeholder {
+  color: var(--ink-mute);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+/* ── Scratchpad section heading ── */
+.scratchpad-section-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--ink-mute);
+  font-weight: 600;
+}
+
+/* ── Divider between scratchpad sections ── */
+.scratchpad-divider {
+  height: 1px;
+  background: var(--rule-soft);
+  margin: 0;
+  border: none;
+}
+
+/* ── Working answer section ── */
+.working-answer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.working-answer-row .scratchpad-input {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<!--
+  data-theme and data-mode are set here as defaults to prevent a flash
+  of unstyled content on load. React (via the preferences store) updates
+  them immediately based on the user's last saved preferences.
+-->
+<html lang="en" data-theme="light" data-mode="beginner">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary meta -->
+    <title>Cryptic — solving companion</title>
+    <meta name="description"
+          content="A paper-like workspace for cryptic crossword solving. Annotate clues, compare theories, rearrange letters — never spoiled." />
+    <meta name="theme-color" content="#2b271f" />
+
+    <!-- Favicon — SVG scales perfectly at all sizes -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+    <!-- Open Graph — social sharing preview -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content="Cryptic — solving companion" />
+    <meta property="og:description" content="A calm, paper-like workspace for cryptic crossword solving. Annotate clues, branch theories, manipulate letters — your puzzle, your pace." />
+    <meta property="og:image"       content="favicon.svg" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary" />
+    <meta name="twitter:title"       content="Cryptic — solving companion" />
+    <meta name="twitter:description" content="A calm workspace for cryptic crossword solving. Never gives answers." />
+
+    <!-- PWA / mobile -->
+    <meta name="apple-mobile-web-app-capable"   content="yes" />
+    <meta name="apple-mobile-web-app-title"     content="Cryptic" />
+    <meta name="mobile-web-app-capable"         content="yes" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

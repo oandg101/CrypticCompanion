@@ -1,0 +1,37 @@
+/* ============================================================
+   reset.css — minimal browser reset
+   Phase 6: replaces tailwind.css (Tailwind Preflight).
+
+   globals.css already handles the essential resets (box-sizing,
+   margins, button/link defaults). This file adds the few items
+   Preflight contributed that globals.css doesn't cover.
+
+   Tailwind has been removed from package.json and postcss.config.js.
+   Run `npm install` after applying this version.
+   ============================================================ */
+
+/* Images and media: block display prevents inline whitespace gaps */
+img,
+picture,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+/* SVG: block by default so it doesn't create inline whitespace */
+svg {
+  display: block;
+}
+
+/* Remove default fieldset styles */
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Consistent table border behaviour */
+table {
+  border-collapse: collapse;
+}

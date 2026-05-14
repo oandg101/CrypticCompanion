@@ -1,0 +1,151 @@
+/* ── Topbar ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;  /* brand | session | toggles — never wrap */
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--rule-soft);
+
+  /* Sticky at top of viewport */
+  position: sticky;
+  top: 0;
+  z-index: var(--z-topbar);
+
+  /* Frosted-glass effect over content below */
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ── Brand ── */
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.brand__mark {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-tight);
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.brand__sub {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--ink-mute);
+}
+
+/* ── Toggle group ── */
+.toggles {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ── Individual toggle button ── */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px 7px 10px;
+  border: 1px solid var(--hairline);
+  background: var(--paper-card);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    border-color var(--t-fast),
+    transform var(--t-fast),
+    box-shadow var(--t-fast);
+  font-family: var(--font-ui);
+  white-space: nowrap;
+}
+
+.toggle:hover {
+  border-color: var(--rule);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+}
+
+.toggle:active {
+  transform: translateY(0);
+}
+
+/* Focus ring handled globally by accessibility.css */
+
+/* ── Toggle dot indicator ── */
+.toggle__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--hairline);
+  transition: background var(--t-fast);
+  flex-shrink: 0;
+}
+
+/* When toggle is pressed (active), dot fills with ink */
+.toggle[aria-pressed="true"] .toggle__dot {
+  background: var(--ink);
+}
+
+.toggle__label {
+  white-space: nowrap;
+}
+
+.toggle__value {
+  color: var(--ink-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Muted toggle — Reference button in expert mode ──
+   Still accessible and clickable, just visually de-emphasised
+   so it doesn't compete with the controls experts actually use. */
+.toggle--muted {
+  opacity: 0.55;
+  border-color: transparent;
+  background: transparent;
+}
+
+.toggle--muted:hover {
+  opacity: 1;
+  border-color: var(--hairline);
+  background: var(--paper-card);
+}
+
+/* ── Mobile: hide text labels to save space ── */
+@media (max-width: 640px) {
+  .topbar {
+    padding: 14px 16px;
+  }
+
+  .brand__sub {
+    display: none;
+  }
+
+  .toggle__label {
+    display: none;
+  }
+
+  .toggle {
+    padding: 7px 10px;
+  }
+}
+
+/* On very small screens, allow the session controls to be hidden
+   if the topbar would overflow. The mobile CSS in SessionControls.css
+   handles hiding session-btn labels; this hides the whole group
+   below 400px where even icon buttons crowd the bar too much. */
+@media (max-width: 400px) {
+  .session-controls {
+    display: none;
+  }
+}

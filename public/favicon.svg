@@ -1,0 +1,34 @@
+<!--
+  Cryptic Companion favicon
+  A numbered crossword cell — the most immediately recognisable symbol
+  of a cryptic crossword. Clean at 16px, 32px, and 64px.
+
+  Colours match the design token palette:
+    Background: --paper-card  #fbf8f1  (warm white — letter cell)
+    Border:     --rule        #2b271f  (dark ink — cell border)
+    Number:     --ink-mute    #8a8478  (muted — clue number)
+    Letter:     --rule        #2b271f  (dark ink — the answer letter)
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Cell background — warm paper white -->
+  <rect width="32" height="32" rx="5" fill="#fbf8f1"/>
+
+  <!-- Cell border — thick, like a printed crossword -->
+  <rect x="1.5" y="1.5" width="29" height="29" rx="4"
+        fill="none" stroke="#2b271f" stroke-width="2.5"/>
+
+  <!-- Clue number "1" — top-left corner, small and muted -->
+  <text x="4.5" y="10.5"
+        font-family="'IBM Plex Mono', 'Menlo', monospace"
+        font-size="7.5"
+        font-weight="600"
+        fill="#8a8478">1</text>
+
+  <!-- Answer letter "C" — centred, editorial serif -->
+  <text x="16" y="25"
+        font-family="'Fraunces', 'Georgia', serif"
+        font-size="17"
+        font-weight="600"
+        text-anchor="middle"
+        fill="#2b271f">C</text>
+</svg>

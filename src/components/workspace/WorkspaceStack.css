@@ -1,0 +1,523 @@
+/* ============================================================
+   Workspace Stack — attempt accordion styles
+   Covers: WorkspaceStack, AttemptCard, AttemptHeader,
+           ConfidenceDots, CollapsedPreview
+   ============================================================ */
+
+/* ── Stack wrapper ── */
+.workspace-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ── "Add theory" button ── */
+.workspace-stack__add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px dashed var(--rule-soft);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--ink-mute);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  transition:
+    border-color var(--t-fast),
+    color var(--t-fast),
+    background var(--t-fast);
+}
+
+.workspace-stack__add:hover {
+  border-color: var(--hairline);
+  color: var(--ink-soft);
+  background: var(--paper-card);
+}
+
+.workspace-stack__add-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Attempt card ── */
+.attempt {
+  background: var(--paper-card);
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  transition:
+    border-color var(--t-fast),
+    box-shadow var(--t-med);
+}
+
+.attempt[data-state="active"] {
+  border-color: var(--rule);
+  box-shadow: var(--shadow-card);
+}
+
+/* ── Attempt header row ── */
+/* Now a <div> flex container; interactive children are proper <button> elements.
+   Phase 5.2: changed from <button> to <div> to allow sibling buttons for
+   confidence cycling and delete — nested interactive elements are invalid HTML. */
+.attempt__head {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+/* Collapsed state: remove border so preview flows cleanly */
+.attempt[data-state="collapsed"] .attempt__head {
+  border-bottom-color: transparent;
+}
+
+/* ── Expand/collapse toggle button — occupies the main row area ── */
+.attempt__toggle {
+  flex: 1;
+  min-width: 0;        /* allow inner text to truncate */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  transition: background var(--t-fast);
+}
+
+.attempt__toggle:hover {
+  background: color-mix(in srgb, var(--paper-sunk) 40%, transparent);
+}
+
+/* ── Confidence button ── */
+.attempt__conf-btn {
+  display: flex;
+  align-items: center;
+  padding: 14px 8px 14px 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  transition: opacity var(--t-fast);
+}
+
+.attempt__conf-btn:hover {
+  opacity: 0.75;
+}
+
+.attempt__conf-btn:focus-visible {
+  outline: 2px solid var(--ind);
+  outline-offset: 2px;
+}
+
+/* ── Attempt number ── */
+.attempt__num {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink-mute);
+  width: 28px;
+  font-variation-settings: "opsz" 144;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color var(--t-fast);
+}
+
+.attempt[data-state="active"] .attempt__num {
+  color: var(--ink);
+}
+
+/* ── Title block ── */
+.attempt__title-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0; /* allow truncation */
+}
+
+.attempt__title {
+  font-weight: 600;
+  font-size: var(--text-base);
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attempt__strategy {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Working answer badge ── */
+.attempt__guess {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+  padding: 4px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  background: var(--paper-sunk);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.attempt__guess--empty {
+  color: var(--ink-mute);
+  letter-spacing: 0.08em;
+  font-style: italic;
+}
+
+/* ── Confidence dots ── */
+.attempt__confidence {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.conf-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hairline);
+  transition: background var(--t-fast);
+}
+
+.conf-dot--on {
+  background: var(--ind);
+}
+
+/* ── Expand/collapse caret ── */
+.attempt__caret {
+  color: var(--ink-mute);
+  font-size: 12px;
+  transition: transform var(--t-fast), color var(--t-fast);
+  flex-shrink: 0;
+}
+
+.attempt[data-state="active"] .attempt__caret {
+  transform: rotate(180deg);
+  color: var(--ink);
+}
+
+/* ── Delete button ── */
+/* Sits after the caret; hidden until the attempt header is hovered.
+   This keeps the header clean — the delete action is deliberate,
+   not something a user should trigger by accident. */
+.attempt__delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  color: var(--ink-mute);
+  cursor: pointer;
+  flex-shrink: 0;
+  /* Hidden until header hovered */
+  opacity: 0;
+  transition: opacity var(--t-fast), color var(--t-fast), background var(--t-fast);
+}
+
+.attempt__delete svg {
+  width: 13px;
+  height: 13px;
+  pointer-events: none;
+}
+
+/* Show on header hover */
+.attempt__head:hover .attempt__delete {
+  opacity: 1;
+}
+
+/* Deepen on direct hover */
+.attempt__delete:hover {
+  color: var(--def);
+  background: var(--def-bg);
+  opacity: 1;
+}
+
+/* Always visible when focused via keyboard */
+.attempt__delete:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--def);
+  outline-offset: 1px;
+  color: var(--def);
+}
+
+
+/* ── Theory meta edit strip ─────────────────────────────────
+   Shown when an attempt is expanded. Sits between the header
+   and the body. Contains title + strategy as live-save inputs.
+   ─────────────────────────────────────────────────────────── */
+.attempt__meta-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--rule-soft);
+  background: var(--paper-sunk);
+}
+
+.attempt__meta-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  padding: 3px 0;
+  transition: color var(--t-fast);
+}
+
+.attempt__meta-input--title {
+  font-weight: 600;
+  font-size: var(--text-base);
+  color: var(--ink);
+}
+
+.attempt__meta-input--strategy {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+.attempt__meta-input::placeholder {
+  color: var(--ink-mute);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Subtle underline on focus shows the field is editable */
+.attempt__meta-input:focus {
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: -1px; /* compensate so layout doesn't shift */
+}
+
+/* ── Collapsed preview ── */
+/* Shows a one-line summary when the attempt is collapsed */
+.collapsed-preview {
+  padding: 0 18px 14px;
+  font-size: var(--text-sm);
+  color: var(--ink-mute);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* ── Attempt body (expanded content) ── */
+.attempt__body {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+}
+
+/* On tablet/mobile: single column */
+@media (max-width: 1024px) {
+  .attempt__body {
+    grid-template-columns: 1fr;
+  }
+
+  .attempt__title-block {
+    /* Allow wrapping on mobile */
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .attempt__head {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  /* On small screens, hide strategy text */
+  .attempt__strategy {
+    display: none;
+  }
+
+  .attempt__guess {
+    display: none;
+  }
+}
+
+/* ── Work area (left part of body) ── */
+.work {
+  border-right: 1px solid var(--rule-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+  .work {
+    border-right: none;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+}
+
+/* ── Utility sidebar (right part of body) ── */
+.util {
+  padding: 14px 16px;
+  background: var(--paper-sunk);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 200px;
+}
+
+.util__label {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  font-weight: 600;
+}
+
+.util__notes {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: var(--leading-loose);
+  flex: 1;
+  white-space: pre-wrap;
+}
+
+.util__history {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+}
+
+.util__history-entry::before {
+  content: '+ ';
+  color: var(--ink-mute);
+}
+
+/* ── Phase 3: Editable util sidebar ── */
+
+.util__section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Notes textarea */
+.util__notes--editable {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px 10px;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  background: var(--paper-card);
+  color: var(--ink-soft);
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  line-height: var(--leading-loose);
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--t-fast);
+}
+
+.util__notes--editable:focus {
+  border-color: var(--hairline);
+}
+
+.util__notes--editable::placeholder {
+  color: var(--ink-mute);
+  font-style: italic;
+}
+
+/* History entry row */
+.util__history-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--ink-mute);
+}
+
+.util__history-entry::before {
+  content: '+';
+  flex-shrink: 0;
+  color: var(--ink-mute);
+}
+
+.util__history-text {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.util__history-remove {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--ink-mute);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+  opacity: 0;
+  flex-shrink: 0;
+  border-radius: 2px;
+  transition: opacity var(--t-fast), color var(--t-fast);
+}
+
+.util__history-entry:hover .util__history-remove {
+  opacity: 1;
+}
+
+.util__history-remove:hover {
+  color: var(--ink);
+}
+
+/* History entry input */
+.util__history-input {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  outline: none;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.util__history-input:focus {
+  border-color: var(--hairline);
+  background: var(--paper-card);
+}
+
+.util__history-input::placeholder {
+  color: var(--ink-mute);
+  font-style: italic;
+}

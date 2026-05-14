@@ -1,0 +1,138 @@
+/* ============================================================
+   Density modes — expert vs beginner layout overrides
+   
+   All [data-mode="expert"] rules live here.
+   All [data-mode="beginner"] rules live here.
+   
+   WHY a separate file:
+     Density changes affect multiple components. Putting them
+     in component files would scatter them across 8+ files,
+     making density behaviour impossible to review at a glance.
+     This file is the single source of truth for how the app
+     looks different at each density level.
+
+   HOW it works:
+     App.tsx sets data-mode="expert" or data-mode="beginner"
+     on <html>. CSS descendant selectors do the rest.
+     No JavaScript needed for layout changes.
+   ============================================================ */
+
+
+/* ══════════════════════════════════════════════════════════════
+   EXPERT MODE — minimal, dense, direct
+   Goal: zero unnecessary chrome for experienced solvers
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Workspace stack: tighter gap between cards ── */
+[data-mode="expert"] .workspace-stack {
+  gap: 10px;
+}
+
+/* ── Attempt card: tighter header padding ── */
+[data-mode="expert"] .attempt__head {
+  padding: 10px 16px;
+  gap: 12px;
+}
+
+/* ── Strategy line: hidden in expert mode ──
+   Experts know what each theory is by its title alone.
+   The strategy text adds noise for power users. */
+[data-mode="expert"] .attempt__strategy {
+  display: none;
+}
+
+/* ── Collapsed preview: hidden in expert mode ──
+   Expert users have fewer open theories and remember them.
+   Hiding the preview keeps collapsed cards very compact. */
+[data-mode="expert"] .collapsed-preview {
+  display: none;
+}
+
+/* ── Attempt body: tighter grid ── */
+[data-mode="expert"] .attempt__body {
+  grid-template-columns: 1fr 210px;
+}
+
+/* ── Scratchpad: tighter inner padding ── */
+[data-mode="expert"] .scratchpad {
+  padding: 14px 16px;
+  gap: 12px;
+}
+
+/* ── Work-line label: narrower in expert (less breathing room needed) ── */
+[data-mode="expert"] .work-line__label {
+  min-width: 58px;
+}
+
+/* ── Util sidebar: tighter padding ── */
+[data-mode="expert"] .util {
+  padding: 10px 12px;
+  gap: 10px;
+}
+
+/* ── Clue breakdown: tighter ── */
+[data-mode="expert"] .breakdown {
+  gap: 10px;
+}
+
+/* ── Add theory button: smaller ── */
+[data-mode="expert"] .workspace-stack__add {
+  padding: 9px;
+  font-size: var(--text-xs);
+}
+
+/* ── Beginner tips: always hidden in expert mode ──
+   The .beginner-tip component reads mode from the store,
+   but this CSS adds a second layer of protection. */
+[data-mode="expert"] .beginner-tip {
+  display: none !important;
+}
+
+/* ── Learning panel: hidden by default in expert mode ──
+   The toggle in the topbar can still open it if needed.
+   When data-learning-open="true" is set on .learning-panel,
+   it overrides this rule and shows the panel even in expert mode. */
+[data-mode="expert"] .learning-panel:not([data-open="true"]) {
+  display: none;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   BEGINNER MODE — spacious, guided, annotated
+   Goal: clear visual hierarchy and supportive onboarding
+   ══════════════════════════════════════════════════════════════ */
+
+/* Beginner mode is the default layout — current spacing is already
+   designed for beginners. This section adds guidance layers on top. */
+
+/* ── Attempt header: show a subtle "expand" hint on collapsed cards ──
+   Expert users know accordion behaviour; beginners may not. */
+[data-mode="beginner"] .collapsed-preview {
+  padding-bottom: 16px;
+}
+
+/* ── Beginner tip: visible and well-spaced ── */
+.beginner-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--fod-bg);
+  border: 1px solid color-mix(in srgb, var(--fod) 20%, transparent);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  line-height: var(--leading-normal);
+}
+
+.beginner-tip__icon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: var(--fod);
+  margin-top: 1px;
+}
+
+.beginner-tip__text {
+  flex: 1;
+}
